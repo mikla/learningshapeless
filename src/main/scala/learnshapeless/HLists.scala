@@ -1,8 +1,7 @@
 package learnshapeless
 
 import shapeless._
-
-import learnshapeless.Data._
+import learnshapeless.Data.{England, _}
 
 /** HLists are linked-list data structures that include type-information about all their elements. The H stands for
   * "heterogeneous", because the elements dont share a single "homogeneous" type. HLists are like tuples in that all
@@ -33,13 +32,13 @@ object Ch01_HLists extends App {
     (a) start the `sbt console`, and enter `:type learnshapeless.HLists.ex_newton`
     (b) if you are using Intellij, you can focus cursor on the expression and activate TypeInfo command (Ctrl-Shift-P on my Mac)
      */
-  def ex_newton = ???
+  def ex_newton: String :: Int :: Country :: HNil = "Newton" :: 1642 :: England :: HNil
   println(s"ex_newton: $ex_newton")
 
   def eg_prependAndAppend: String :: String :: Int :: Country :: Discovery :: HNil = "Albert" +: eg1_einstein :+ TheoryOfRelativity
 
   /* Exercise : Prepend the String "Isaac" to `ex_newton` and append `Calculus` */
-  def ex_prependAndAppend = ???
+  def ex_prependAndAppend = "Isaac" +: ex_newton :+ Calculus
   println(s"ex_prependAndAppend $ex_prependAndAppend")
 
 
@@ -49,17 +48,17 @@ object Ch01_HLists extends App {
   def eg_einstein_tuple: (String, Int, Country) = eg1_einstein.tupled
 
   /* Convert `ex_newton` into a tuple */
-  def ex_tuple: (String, Int, Country) = ???
+  def ex_tuple: (String, Int, Country) = ex_newton.tupled
   println(s"ex_tuple $ex_tuple")
 
   /* Using operations available via `import syntax.std.tuple._`, append `Calculus` to `ex_tuple`  */
-  def ex_tuple_append = ???
+  def ex_tuple_append = ex_tuple :+ Calculus
   println(s"ex_tuple_append $ex_tuple_append")
 
   def eg_from_tuple = ("Einstein", 1879, Germany).productElements
 
   /* convert ex_tuple_append into an HList */
-  def ex_from_tuple = ???
+  def ex_from_tuple = ex_tuple_append.productElements
   println(s"ex_from_tuple $ex_from_tuple")
 
 
@@ -75,18 +74,21 @@ object Ch01_HLists extends App {
 
   def eg_poly = eg1_einstein.map(ExamplePoly)
 
+  object AllCapsPoly extends DefaultIdentityMapping {
+    implicit def allCaps = at[String](_.toUpperCase)
+  }
+
   /* Apply a Poly1 mapping over `ex_newton` that converts the name to ALLCAPS, and leaves other fields unchanged
    * Return resulting HList */
-  def ex_poly = ???
+  def ex_poly = ex_newton.map(AllCapsPoly)
   println(s"ex_poly: $ex_poly")
-
 
 
   /* Note how exact type of element 2 is returned */
   def eg_index: Country = eg1_einstein(2)
 
   /* Exercise: what happen if you try to index an HList outside it bounds? Try accessing the 4th element of `eg1_einstein` */
-  def ex_indexOutOfBounds = ???
+  def ex_indexOutOfBounds = ex_newton(2)
 
 
   def eg_mapped_by_index = eg1_einstein.updateAtWith(2)(_ == Australia)
@@ -95,7 +97,7 @@ object Ch01_HLists extends App {
   Because `Data.scientistsFirstNames` is a `Map`, it can be passed as a function K => V
   * Use updateAtWith to identify the field by numeric index rather than y type.
   * `updateAtWith` returns the old value, and the updated HList in a tuple */
-  def ex_to_firstname_by_index: (String, HList) = ???
+  def ex_to_firstname_by_index: (String, HList) = ex_newton.updateAtWith(0)(Data.scientistsFirstNames)
   println(s"ex_to_firstname_by_index $ex_to_firstname_by_index")
 
 }
