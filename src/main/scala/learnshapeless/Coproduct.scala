@@ -46,11 +46,11 @@ object Ch03_Coproducts extends App {
   def eg_invalidClue = Coproduct[Clue](born(2020))
 
   /** create a clue about the identify of a famous scientist, being the name of `eg_florey` */
-  def ex_nameClue = ???
+  def ex_nameClue = Coproduct[Clue](name("Florey"))
   println(s"ex_nameClue $ex_nameClue")
 
   /** create a clue about the identify of a famous scientist, being the birth year `1879` */
-  def ex_bornClue = ???
+  def ex_bornClue = Coproduct[Clue](born(1898))
   println(s"ex_bornClue $ex_bornClue")
 
   def eg_allClues: Vector[Clue] = Vector(eg_clueCountry, eg_invalidClue, ex_nameClue, ex_bornClue)
