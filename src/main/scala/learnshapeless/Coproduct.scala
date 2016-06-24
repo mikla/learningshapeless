@@ -41,6 +41,11 @@ object Ch03_Coproducts extends App {
     * It is either a name, or a birth year, or a country */
   type Clue = Name :+: Born :+: Country :+: CNil
 
+  type StringIntBool = String :+: Int :+: Boolean :+: CNil
+  def m_str = Coproduct[StringIntBool]("str")
+  def m_bool = Coproduct[StringIntBool](true)
+  def m_int = Coproduct[StringIntBool](1)
+
   def eg_clueCountry = Coproduct[Clue](australia)
 
   def eg_invalidClue = Coproduct[Clue](born(2020))
@@ -59,11 +64,11 @@ object Ch03_Coproducts extends App {
   def eg_select: Option[Country] = eg_clueCountry.select[Country]
 
   /* select the name of `eg_clueCountry` */
-  def ex_selectName: Option[Name] = ???
+  def ex_selectName: Option[Name] = eg_clueCountry.select[Name]
   println(s"ex_selectName $ex_selectName")
 
   /* drop two elements of  `eg_clueCountry` */
-  def ex_drop2: Option[Country :+: CNil] = ???
+  def ex_drop2: Option[Country :+: CNil] = eg_clueCountry.drop(2)
   println(s"ex_drop2 $ex_drop2")
 
 
